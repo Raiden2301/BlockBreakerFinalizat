@@ -1,3 +1,5 @@
+package com.bogdancristian.blockbreaker;
+
 import android.graphics.RectF;
 
 /**
@@ -40,7 +42,7 @@ public class Paddle {
     }
 
     //Setter pentru starea padului
-    public setMovementState(int state){
+    public void setMovementState(int state){
         paddleMoving = state;
     }
 
