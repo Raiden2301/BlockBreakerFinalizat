@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+
     tools:context="com.bogdancristian.blockbreaker.BlockBreaker">
+
+    <com.bogdancristian.blockbreaker.DraggableBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.bogdancristian.blockbreaker.SliderView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </com.bogdancristian.blockbreaker.DraggableBox>
 
 </android.support.constraint.ConstraintLayout>

@@ -8,8 +8,13 @@ import android.graphics.RectF;
 
 public class Paddle {
 
-    private RectF rect;//pentru coordonate
-    private float length;//lungimea padului
+    // Padul va avea 3 zone diferite pt lovirea mingii
+    private RectF rect;//pentru coordonatele generale ale padului
+    private RectF rectLeft; // zona din stanga
+    private RectF rectRight; // zona din dreapta
+    private RectF rectMid; // zona din centru
+    private float length1;//lungimea zonelor laterale
+    private float length2;//lungimea centrala
     private float height;//inaltimea padului
     private float x;
     private float y;//coordonatele din stanga sus pt pad
@@ -25,20 +30,30 @@ public class Paddle {
 
     //Constructorul padului va lua ca argumente dimensiunile ecranului
     public Paddle(int screenX, int screenY){
-        length = 130;
+        length1 = 40;
+        length2 = 50;
         height = 20;
 
         //punem paddul in centru
-        x = screenX / 2;
-        y = screenX -20;
+        x = screenX / 2 - 50;
+        y = screenY -300;
 
-        rect = new RectF(x, y, x+length, y+height);
-
+        rectLeft = new RectF(x, y, x+length1, y+height);
+        rectMid = new RectF(x + length1, y, x + length1 + length2, y + height);
+        rectRight = new RectF(x + length1 + length2, y, x + length1 + length1 + length2, y+height);
         paddleSpeed = 350;
     }
     //Getter pentru Rect
-    public RectF getRect(){
-        return rect;
+    public RectF getRectLeft(){
+        return rectLeft;
+    }
+
+    public RectF getRectMid() {
+        return rectMid;
+    }
+
+    public RectF getRectRight() {
+        return rectRight;
     }
 
     //Setter pentru starea padului
@@ -54,7 +69,12 @@ public class Paddle {
         if(paddleMoving == RIGHT){
             x = x + paddleSpeed/fps;
         }
-        rect.left = x;
-        rect.right = x + length;
+        rectLeft.left = x;
+        rectLeft.right = x + length1;
+        rectMid.left = x + length1;
+        rectMid.right = x + length1 + length2;
+        rectRight.left = x + length1 + length2;
+        rectRight.right = x + length1 + length2 + length1 ;
+
     }
 }

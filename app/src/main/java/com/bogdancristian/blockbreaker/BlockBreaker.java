@@ -1,5 +1,6 @@
 package com.bogdancristian.blockbreaker;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -17,10 +18,11 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
-public class BlockBreaker extends AppCompatActivity {
+public class BlockBreaker extends Activity {
 
 
     BreakoutView breakoutView;
@@ -117,7 +119,7 @@ public class BlockBreaker extends AppCompatActivity {
             int brickWidth = screenX / 8;
             int brickHeight = screenY / 10;
 
-// Build a wall of bricks
+            // Build a wall of bricks
             numBricks = 0;
 
             for(int column = 0; column < 8; column ++ ){
@@ -126,8 +128,11 @@ public class BlockBreaker extends AppCompatActivity {
                     numBricks ++;
                 }
             }
-            score = 0;
-            lives = 3;
+            if(lives == 0){
+                score = 0;
+                lives = 3;
+            }
+
         }
 
         public void run() {
@@ -154,25 +159,138 @@ public class BlockBreaker extends AppCompatActivity {
 
             paddle.update(fps);
 
+            ball.update(fps);
+
             // Check for ball colliding with a brick
             for(int i = 0; i < numBricks; i++){
 
                 if (bricks[i].getVisibility()){
 
-                    if(RectF.intersects(bricks[i].getRect(),ball.getRect())) {
-                        bricks[i].setInvisible();
-                        ball.reverseYVelocity();
-                        score = score + 10;
-                        soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                    if(RectF.intersects(bricks[i].getRect(), ball.getRect())) {
+                        //verificam ccliziunea sudica
+                        if(bricks[i].getRect().left < ball.getRect().left && bricks[i].getRect().right > ball.getRect().right && bricks[i].getRect().top < ball.getRect().top){
+                            bricks[i].setInvisible();
+                            ball.reverseYVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea est
+                        else if(bricks[i].getRect().top <= ball.getRect().top && bricks[i].getRect().bottom >= ball.getRect().bottom && bricks[i].getRect().right < ball.getRect().right){
+                            bricks[i].setInvisible();
+                            ball.reverseXVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea nordica
+                        else if(bricks[i].getRect().left < ball.getRect().left && bricks[i].getRect().right > ball.getRect().right && bricks[i].getRect().bottom >= ball.getRect().bottom){
+                            bricks[i].setInvisible();
+                            ball.reverseYVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea vestica
+                        else if(bricks[i].getRect().top <= ball.getRect().top && bricks[i].getRect().bottom >= ball.getRect().bottom && bricks[i].getRect().left >= ball.getRect().left){
+                            bricks[i].setInvisible();
+                            ball.reverseXVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea sud-vest latura sudica
+                        else if(bricks[i].getRect().left >= ball.getRect().left && bricks[i].getRect().left <= ball.getRect().right && bricks[i].getRect().top < ball.getRect().top){
+                            bricks[i].setInvisible();
+                            ball.reverseYVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea sud-est latura sudica
+                        else if(bricks[i].getRect().right >= ball.getRect().left && bricks[i].getRect().right <= ball.getRect().right && bricks[i].getRect().top < ball.getRect().top){
+                            bricks[i].setInvisible();
+                            ball.reverseYVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+
+                        //Coliziunea sud-est latura estica
+                        else if(bricks[i].getRect().bottom >= ball.getRect().top && bricks[i].getRect().bottom <= ball.getRect().bottom && bricks[i].getRect().right <= ball.getRect().right){
+                            bricks[i].setInvisible();
+                            ball.reverseXVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea Nord-est latura estica
+                        else if(bricks[i].getRect().top >= ball.getRect().top && bricks[i].getRect().top <= ball.getRect().bottom && bricks[i].getRect().left <= ball.getRect().left){
+                            bricks[i].setInvisible();
+                            ball.reverseXVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+
+                        //Coliziunea nord-eestica latura nordica
+                        else if(bricks[i].getRect().right >= ball.getRect().left && bricks[i].getRect().right <= ball.getRect().right && bricks[i].getRect().top >= ball.getRect().top){
+                            bricks[i].setInvisible();
+                            ball.reverseYVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea nord-vestica latura nordica
+                        else if(bricks[i].getRect().left >= ball.getRect().left && bricks[i].getRect().left <= ball.getRect().right && bricks[i].getRect().top >= ball.getRect().top){
+                            bricks[i].setInvisible();
+                            ball.reverseYVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+
+                        //Coliziunea nord-vestica latura vestica
+                        else if(bricks[i].getRect().top >= ball.getRect().top && bricks[i].getRect().top <= ball.getRect().bottom && bricks[i].getRect().left >= ball.getRect().left){
+                            bricks[i].setInvisible();
+                            ball.reverseXVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+                        //Coliziunea nord-vestica latura vestica
+                        else if(bricks[i].getRect().bottom >= ball.getRect().top && bricks[i].getRect().bottom <= ball.getRect().bottom && bricks[i].getRect().left >= ball.getRect().left){
+                            bricks[i].setInvisible();
+                            ball.reverseXVelocity();
+                            score = score + 10;
+                            soundPool.play(explodeID, 1, 1, 0, 0, 1);
+                            continue;
+                        }
+
                     }
+
+
                 }
             }
 
-            // Check for ball colliding with paddle
-            if(RectF.intersects(paddle.getRect(),ball.getRect())) {
-                ball.setRandomXVelocity();
+            // Verificam unde se loveste mingea
+            if(RectF.intersects(paddle.getRectLeft(), ball.getRect())) {
+                ball.setNegativeXvelocity();
                 ball.reverseYVelocity();
-                ball.clearObstacleY(paddle.getRect().top - 2);
+                ball.clearObstacleY(paddle.getRectLeft().top - 2);
+                soundPool.play(beep1ID, 1, 1, 0, 0, 1);
+            }
+            if(RectF.intersects(paddle.getRectMid(), ball.getRect())) {
+               // ball.setRandomXVelocity();
+                ball.reverseYVelocity();
+                ball.setXVelocityZero();
+                ball.clearObstacleY(paddle.getRectMid().top - 2);
+                soundPool.play(beep1ID, 1, 1, 0, 0, 1);
+            }
+            if(RectF.intersects(paddle.getRectRight(), ball.getRect())) {
+                ball.setPositiveXvelocity();
+                ball.reverseYVelocity();
+                ball.clearObstacleY(paddle.getRectRight().top - 2);
                 soundPool.play(beep1ID, 1, 1, 0, 0, 1);
             }
 
@@ -215,7 +333,7 @@ public class BlockBreaker extends AppCompatActivity {
                 paused = true;
                 createBricksAndRestart();
             }
-            ball.update(fps);
+
 
         }
 
@@ -234,7 +352,9 @@ public class BlockBreaker extends AppCompatActivity {
                 paint.setColor(Color.argb(255,  255, 255, 255));
 
                 // Draw the paddle
-                canvas.drawRect(paddle.getRect(), paint);
+                canvas.drawRect(paddle.getRectLeft(), paint);
+                canvas.drawRect(paddle.getRectMid(), paint);
+                canvas.drawRect(paddle.getRectRight(), paint);
 
                 // Draw the ball
                 canvas.drawRect(ball.getRect(), paint);
@@ -262,6 +382,7 @@ public class BlockBreaker extends AppCompatActivity {
                 if(score == numBricks * 10){
                     paint.setTextSize(90);
                     canvas.drawText("YOU HAVE WON!", 10,screenY/2, paint);
+
                 }
 
                 // Has the player lost?

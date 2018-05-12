@@ -34,17 +34,40 @@ public class Ball {
         yVelocity = -yVelocity;
     }
 
+    public void reverseXVelocity(int answer){
+        xVelocity = - xVelocity + answer;
+    }
+
     public void reverseXVelocity(){
-        xVelocity = - xVelocity;
+        xVelocity = - xVelocity ;
     }
 
 
     public void setRandomXVelocity(){
         Random generator = new Random();
-        int answer = generator.nextInt(2);
+        int answer = generator.nextInt(10);
 
-        if(answer == 0){
-            reverseXVelocity();
+            reverseXVelocity(answer);
+    }
+    public void setXVelocityZero(){
+        Random generator = new Random();
+        int answer = generator.nextInt(10);
+        xVelocity = 0 + answer;
+    }
+    public void setNegativeXvelocity(){
+           if(xVelocity > 0 ){
+               xVelocity = -xVelocity;
+           }
+           if(xVelocity > -30 || xVelocity < 30){
+               xVelocity = xVelocity - 80;
+           }
+    }
+    public void setPositiveXvelocity(){
+        if(xVelocity < 0 ){
+            xVelocity = -xVelocity;
+        }
+        if(xVelocity > -30 || xVelocity < 30){
+            xVelocity = xVelocity + 80;
         }
     }
 
